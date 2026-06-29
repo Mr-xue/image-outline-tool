@@ -135,7 +135,7 @@ onMounted(scheduleCompose)
     <!-- 可见输出画布（棋盘格背景透出透明区域） -->
     <canvas
       ref="outputCanvas"
-      class="checkerboard max-h-full max-w-full rounded-lg shadow-2xl"
+      class="checkerboard max-h-full max-w-full rounded-md border border-gray-200 shadow-sm"
       style="cursor: none; object-fit: contain"
       @mousedown="handlePointerDown"
       @mousemove="handlePointerMove"
@@ -143,11 +143,10 @@ onMounted(scheduleCompose)
       @mouseleave="endStroke"
     ></canvas>
 
-    <!-- 自定义画笔光标圆圈 -->
+    <!-- 自定义画笔光标圆圈（mix-blend-difference 保证在任意底色上可见） -->
     <div
       v-show="cursorPos.visible"
-      class="pointer-events-none absolute rounded-full border-2 mix-blend-difference"
-      :class="tool === 'erase' ? 'border-rose-300' : 'border-violet-300'"
+      class="pointer-events-none absolute rounded-full border-2 border-white mix-blend-difference"
       :style="{
         width: cursorSize + 'px',
         height: cursorSize + 'px',

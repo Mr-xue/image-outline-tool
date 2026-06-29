@@ -29,16 +29,16 @@ const presetColors = ['#ffffff', '#000000', '#f43f5e', '#22d3ee', '#a78bfa', '#f
 <template>
   <div class="flex flex-col gap-6">
     <!-- 描边设置 -->
-    <section class="rounded-xl border border-slate-700/60 bg-slate-800/40 p-4">
-      <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-200">
-        <span class="h-1.5 w-1.5 rounded-full bg-indigo-400"></span>描边设置
+    <section class="rounded-lg border border-gray-200 bg-white p-4">
+      <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold text-black">
+        <span class="h-1.5 w-1.5 rounded-full bg-black"></span>描边设置
       </h3>
 
       <!-- 描边大小 -->
       <div class="mb-4">
-        <div class="mb-2 flex items-center justify-between text-xs text-slate-400">
+        <div class="mb-2 flex items-center justify-between text-xs text-gray-500">
           <span>描边大小</span>
-          <span class="tabular-nums text-slate-300">{{ strokeSize }} px</span>
+          <span class="tabular-nums text-black">{{ strokeSize }} px</span>
         </div>
         <input
           type="range" min="0" max="50" :value="strokeSize" :disabled="disabled"
@@ -49,19 +49,19 @@ const presetColors = ['#ffffff', '#000000', '#f43f5e', '#22d3ee', '#a78bfa', '#f
 
       <!-- 描边颜色 -->
       <div>
-        <div class="mb-2 text-xs text-slate-400">描边颜色</div>
+        <div class="mb-2 text-xs text-gray-500">描边颜色</div>
         <div class="flex items-center gap-2">
-          <!-- 预设色块 -->
+          <!-- 预设色块（选中：纯黑描边环） -->
           <button
             v-for="c in presetColors" :key="c"
             class="h-7 w-7 rounded-full border-2 transition-transform hover:scale-110"
-            :class="strokeColor.toLowerCase() === c ? 'border-indigo-400' : 'border-slate-600'"
+            :class="strokeColor.toLowerCase() === c ? 'border-black' : 'border-gray-200'"
             :style="{ backgroundColor: c }"
             :disabled="disabled"
             @click="emit('update:strokeColor', c)"
           ></button>
           <!-- 自定义取色器 -->
-          <label class="relative h-7 w-7 cursor-pointer overflow-hidden rounded-full border-2 border-slate-600">
+          <label class="relative h-7 w-7 cursor-pointer overflow-hidden rounded-full border-2 border-gray-200">
             <span class="absolute inset-0 bg-gradient-to-br from-rose-400 via-violet-400 to-cyan-400"></span>
             <input
               type="color" :value="strokeColor" :disabled="disabled"
@@ -74,18 +74,18 @@ const presetColors = ['#ffffff', '#000000', '#f43f5e', '#22d3ee', '#a78bfa', '#f
     </section>
 
     <!-- 修正工具 -->
-    <section class="rounded-xl border border-slate-700/60 bg-slate-800/40 p-4">
-      <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-200">
-        <span class="h-1.5 w-1.5 rounded-full bg-violet-400"></span>修正工具
+    <section class="rounded-lg border border-gray-200 bg-white p-4">
+      <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold text-black">
+        <span class="h-1.5 w-1.5 rounded-full bg-black"></span>修正工具
       </h3>
 
-      <!-- 擦除 / 还原 切换 -->
+      <!-- 擦除 / 还原 切换（激活：黑底白字） -->
       <div class="mb-4 grid grid-cols-2 gap-2">
         <button
-          class="flex items-center justify-center gap-1.5 rounded-lg border py-2 text-sm font-medium transition-all"
+          class="flex items-center justify-center gap-1.5 rounded-md border py-2 text-sm font-medium transition-all"
           :class="tool === 'erase'
-            ? 'border-indigo-400 bg-indigo-500/15 text-indigo-200'
-            : 'border-slate-600 text-slate-400 hover:border-slate-500'"
+            ? 'border-black bg-black text-white'
+            : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50'"
           :disabled="disabled"
           @click="emit('update:tool', 'erase')"
         >
@@ -93,10 +93,10 @@ const presetColors = ['#ffffff', '#000000', '#f43f5e', '#22d3ee', '#a78bfa', '#f
           擦除
         </button>
         <button
-          class="flex items-center justify-center gap-1.5 rounded-lg border py-2 text-sm font-medium transition-all"
+          class="flex items-center justify-center gap-1.5 rounded-md border py-2 text-sm font-medium transition-all"
           :class="tool === 'restore'
-            ? 'border-violet-400 bg-violet-500/15 text-violet-200'
-            : 'border-slate-600 text-slate-400 hover:border-slate-500'"
+            ? 'border-black bg-black text-white'
+            : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50'"
           :disabled="disabled"
           @click="emit('update:tool', 'restore')"
         >
@@ -107,9 +107,9 @@ const presetColors = ['#ffffff', '#000000', '#f43f5e', '#22d3ee', '#a78bfa', '#f
 
       <!-- 画笔大小 -->
       <div>
-        <div class="mb-2 flex items-center justify-between text-xs text-slate-400">
+        <div class="mb-2 flex items-center justify-between text-xs text-gray-500">
           <span>画笔大小</span>
-          <span class="tabular-nums text-slate-300">{{ brushSize }} px</span>
+          <span class="tabular-nums text-black">{{ brushSize }} px</span>
         </div>
         <input
           type="range" min="1" max="100" :value="brushSize" :disabled="disabled"
@@ -118,10 +118,10 @@ const presetColors = ['#ffffff', '#000000', '#f43f5e', '#22d3ee', '#a78bfa', '#f
         />
       </div>
 
-      <!-- 撤销 / 重做 -->
+      <!-- 撤销 / 重做（次按钮：白底 + 浅灰边框） -->
       <div class="mt-4 grid grid-cols-2 gap-2">
         <button
-          class="flex items-center justify-center gap-1.5 rounded-lg border border-slate-600 py-2 text-sm text-slate-300 transition-colors enabled:hover:border-slate-500 disabled:opacity-40"
+          class="flex items-center justify-center gap-1.5 rounded-md border border-gray-200 py-2 text-sm text-gray-600 transition-colors enabled:hover:border-gray-300 enabled:hover:bg-gray-50 disabled:opacity-40"
           :disabled="!canUndo || disabled"
           @click="emit('undo')"
         >
@@ -129,7 +129,7 @@ const presetColors = ['#ffffff', '#000000', '#f43f5e', '#22d3ee', '#a78bfa', '#f
           撤销
         </button>
         <button
-          class="flex items-center justify-center gap-1.5 rounded-lg border border-slate-600 py-2 text-sm text-slate-300 transition-colors enabled:hover:border-slate-500 disabled:opacity-40"
+          class="flex items-center justify-center gap-1.5 rounded-md border border-gray-200 py-2 text-sm text-gray-600 transition-colors enabled:hover:border-gray-300 enabled:hover:bg-gray-50 disabled:opacity-40"
           :disabled="!canRedo || disabled"
           @click="emit('redo')"
         >
@@ -139,9 +139,9 @@ const presetColors = ['#ffffff', '#000000', '#f43f5e', '#22d3ee', '#a78bfa', '#f
       </div>
     </section>
 
-    <!-- 重新抠图 -->
+    <!-- 重新抠图（次按钮） -->
     <button
-      class="flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800/40 py-2.5 text-sm text-slate-300 transition-colors hover:border-slate-600 hover:bg-slate-700/40 disabled:opacity-40"
+      class="flex items-center justify-center gap-2 rounded-md border border-gray-200 bg-white py-2.5 text-sm text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50 disabled:opacity-40"
       :disabled="disabled"
       @click="emit('reprocess')"
     >

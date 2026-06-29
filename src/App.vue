@@ -133,33 +133,33 @@ const handleExport = () => {
 </script>
 
 <template>
-  <div class="flex h-full flex-col bg-slate-950 text-slate-100">
+  <div class="flex h-full flex-col bg-white text-black">
     <!-- 顶栏 -->
     <header
-      class="flex items-center justify-between border-b border-slate-800 bg-slate-900/60 px-6 py-3 backdrop-blur"
+      class="flex items-center justify-between border-b border-gray-200 bg-white/80 px-6 py-3 backdrop-blur"
     >
       <div class="flex items-center gap-3">
-        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 shadow-lg shadow-indigo-500/30">
+        <div class="flex h-9 w-9 items-center justify-center rounded-md bg-black">
           <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 18h16.5a1.5 1.5 0 001.5-1.5V7.5a1.5 1.5 0 00-1.5-1.5H3.75a1.5 1.5 0 00-1.5 1.5v9a1.5 1.5 0 001.5 1.5z"/></svg>
         </div>
         <div>
-          <h1 class="text-base font-semibold leading-tight">主体抠图描边工具</h1>
-          <p class="text-xs text-slate-500">AI 识别主体 · 智能描边 · 手动修正</p>
+          <h1 class="text-base font-semibold leading-tight text-black">主体抠图描边工具</h1>
+          <p class="text-xs text-gray-500">AI 识别主体 · 智能描边 · 手动修正</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <!-- 重新上传 -->
+        <!-- 重新上传（次按钮：白底 + 浅灰边框） -->
         <label
           v-if="hasImage"
-          class="cursor-pointer rounded-lg border border-slate-700 px-3 py-1.5 text-sm text-slate-300 transition-colors hover:border-slate-600 hover:bg-slate-800"
+          class="cursor-pointer rounded-md border border-gray-200 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:border-gray-300 hover:bg-gray-50"
         >
           <input type="file" accept="image/*" class="hidden" @change="(e) => e.target.files[0] && handleSelect(e.target.files[0])" />
           重新上传
         </label>
-        <!-- 导出 -->
+        <!-- 导出（主按钮：纯黑底白字） -->
         <button
-          class="rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-1.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition-all hover:shadow-indigo-500/40 disabled:cursor-not-allowed disabled:opacity-40"
+          class="rounded-md bg-black px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-gray-600 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500"
           :disabled="!hasImage || isProcessing"
           @click="handleExport"
         >
@@ -171,7 +171,7 @@ const handleExport = () => {
     <!-- 主体区域 -->
     <main class="flex min-h-0 flex-1">
       <!-- 左：画布区 -->
-      <div class="relative flex min-w-0 flex-1 items-center justify-center p-6">
+      <div class="relative flex min-w-0 flex-1 items-center justify-center bg-gray-50 p-6">
         <!-- 未上传：上传区 -->
         <div v-if="!hasImage && !isProcessing" class="h-full w-full max-w-3xl">
           <UploadZone @select="handleSelect" />
@@ -193,26 +193,26 @@ const handleExport = () => {
         <!-- 抠图中：进度遮罩 -->
         <div
           v-if="isProcessing"
-          class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-slate-950/70 backdrop-blur-sm"
+          class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-white/80 backdrop-blur-sm"
         >
-          <div class="h-12 w-12 animate-spin rounded-full border-4 border-slate-700 border-t-indigo-400"></div>
+          <div class="h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-black"></div>
           <div class="text-center">
-            <p class="text-sm font-medium text-slate-200">正在识别主体…</p>
-            <p class="mt-1 text-xs text-slate-500">首次使用需加载 AI 模型，请稍候 {{ progress }}%</p>
+            <p class="text-sm font-medium text-black">正在识别主体…</p>
+            <p class="mt-1 text-xs text-gray-500">首次使用需加载 AI 模型，请稍候 {{ progress }}%</p>
           </div>
         </div>
 
         <!-- 错误提示 -->
         <div
           v-if="error"
-          class="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-lg border border-rose-500/40 bg-rose-500/15 px-4 py-2 text-sm text-rose-200"
+          class="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-600"
         >
           {{ error }}
         </div>
       </div>
 
       <!-- 右：控制面板 -->
-      <aside class="w-72 shrink-0 overflow-y-auto border-l border-slate-800 bg-slate-900/40 p-5">
+      <aside class="w-72 shrink-0 overflow-y-auto border-l border-gray-200 bg-white p-5">
         <ControlPanel
           v-model:stroke-size="strokeSize"
           v-model:stroke-color="strokeColor"
