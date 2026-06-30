@@ -86,12 +86,39 @@ const drawAt = (x, y) => {
   ctx.restore()
 }
 
+/**
+ * 拖动过程中直接把当前笔刷增量画到可见输出画布上，实现主体实时跟随。
+ * 只绘制单个圆形区域，复杂度 O(笔刷面积)，与图片总尺寸无关，避免每帧全图重算描边导致的卡顿。
+ * 描边轮廓在此期间暂不更新，松手后由 scheduleCompose 一次性重算。
+ */
+const drawStrokeToOutput = (x, y) => {
+  const ctx = outputCanvas.value.getContext('2d')
+  const radius = props.brushSize / 2
+
+  ctx.save()
+  ctx.beginPath()
+  ctx.arc(x, y, radius, 0, Math.PI * 2)
+  ctx.closePath()
+
+  if (props.tool === 'erase') {
+    // 擦除：同步抹掉输出画布上对应圆形区域的像素（含残留描边），主体实时消失
+    ctx.globalCompositeOperation = 'destination-out'
+    ctx.fill()
+  } else {
+    // 还原：把原图对应圆形区域画回输出画布（裁剪到圆内），主体实时长出
+    ctx.globalCompositeOperation = 'source-over'
+    ctx.clip()
+    ctx.drawImage(props.originalCanvas, 0, 0)
+  }
+  ctx.restore()
+}
+
 const handlePointerDown = (e) => {
   if (!props.originalCanvas) return
   isDrawing.value = true
   const p = getCanvasPoint(e)
-  drawAt(p.x, p.y)
-  scheduleCompose()
+  drawAt(p.x, p.y) // 更新 mask（真实数据）
+  drawStrokeToOutput(p.x, p.y) // 实时增量显示，拖动中不重算描边
 }
 
 const handlePointerMove = (e) => {
@@ -105,13 +132,14 @@ const handlePointerMove = (e) => {
 
   if (!isDrawing.value) return
   const p = getCanvasPoint(e)
-  drawAt(p.x, p.y)
-  scheduleCompose()
+  drawAt(p.x, p.y) // 更新 mask（真实数据）
+  drawStrokeToOutput(p.x, p.y) // 实时增量显示，拖动中不重算描边
 }
 
 const endStroke = () => {
   if (!isDrawing.value) return
   isDrawing.value = false
+  scheduleCompose() // 松手后一次性重算完整描边并合成，贴合新边界
   emit('stroke-end') // 一笔结束，压入历史
 }
 
